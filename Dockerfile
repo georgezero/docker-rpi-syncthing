@@ -1,10 +1,11 @@
 FROM resin/rpi-raspbian
-MAINTAINER Frank Sachsenheim <funkyfuture@riseup.net>
+MAINTAINER George Shih <georgezero@trove.nyc>
 
-ENV SYNCTHING_VERSION=0.14.6
+ENV SYNCTHING_VERSION=0.14.7
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends apache2-utils ca-certificates curl xmlstarlet \
+ && apt-get install -y --no-install-recommends vim zsh git rsync unzip python3 \
  && curl -s https://syncthing.net/release-key.txt | apt-key add - \
  && echo "deb http://apt.syncthing.net/ syncthing release" > /etc/apt/sources.list.d/syncthing-release.list \
  && apt-get update -o Dir::Etc::sourcelist="sources.list.d/syncthing-release.list" \
