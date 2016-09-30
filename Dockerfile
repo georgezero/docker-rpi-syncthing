@@ -19,3 +19,6 @@ VOLUME /syncthing/data
 
 ADD start.sh /
 CMD /start.sh
+#ADD entry.sh /
+# entry creates non-root user, and runs start.sh
+#CMD /entry.sh
