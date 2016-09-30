@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  client:
+    image: georgezero/rpi-syncthing
+    restart: always
+    network_mode: host
+    volumes:
+      - ~/src/syncthing/config:/syncthing/config
+      - ~/src/syncthing/data:/syncthing/data
+    environment:
+      - GUI_USERNAME=admin
+      - GUI_PASSWORD_PLAIN=admin
