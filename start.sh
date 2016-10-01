@@ -79,7 +79,8 @@ if [ -f "/pre-launch.sh" ]; then
     source /pre-launch.sh
 fi
 
-usermod -u $UID syncthing
+usermod -u 1027 syncthing
+#usermod -u $UID syncthing
 # set permissions so that we have access to volumes
 chown -R syncthing:users $CONFIG_DIR /syncthing/data /usr/bin/syncthing
 chmod -R 770 $CONFIG_DIR /syncthing/data
