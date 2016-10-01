@@ -48,9 +48,15 @@ if [ -z "$GUI_PASSWORD_BCRYPT" ] && [ -n "$GUI_PASSWORD_PLAIN" ]; then
 fi
 : ${GUI_PASSWORD_BCRYPT:=''}
 
+usermod -u 1027 syncthing
+#usermod -u $UID syncthing
+# set permissions so that we have access to volumes
+chown -R syncthing:users $CONFIG_DIR /syncthing/data /usr/bin/syncthing
+chmod -R 777 $CONFIG_DIR /syncthing/data
+
 # generate initial config if necessary
 if [ ! -f $CONFIG_FILE ]; then
-    gosu syncthing /usr/bin/syncthing -generate=$CONFIG_DIR
+    gosu syncthing syncthing -generate=$CONFIG_DIR
     config_del "/configuration/folder"
     config_set "options/startBrowser" "false"
 	config_set "folder/@path" "/syncthing/data"
@@ -80,17 +86,11 @@ if [ -f "/pre-launch.sh" ]; then
     source /pre-launch.sh
 fi
 
-usermod -u 1027 syncthing
-#usermod -u $UID syncthing
-# set permissions so that we have access to volumes
-chown -R syncthing:users $CONFIG_DIR /syncthing/data /usr/bin/syncthing
-chmod -R 770 $CONFIG_DIR /syncthing/data
-
 gosu syncthing syncthing -home=$CONFIG_DIR -paths
 echo "======== config.xml ========"
 cat $CONFIG_FILE
 echo "============================"
-exec gosu syncthing /usr/bin/syncthing -home=$CONFIG_DIR
+exec gosu syncthing syncthing -home=$CONFIG_DIR
 
 exit 1
 
