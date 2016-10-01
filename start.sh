@@ -53,6 +53,7 @@ if [ ! -f $CONFIG_FILE ]; then
     gosu syncthing /usr/bin/syncthing -generate=$CONFIG_DIR
     config_del "/configuration/folder"
     config_set "options/startBrowser" "false"
+	config_set "folder/@path" "/syncthing/data"
 fi
 
 # update config.xml according to environment variables
