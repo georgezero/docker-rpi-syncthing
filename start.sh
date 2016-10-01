@@ -50,7 +50,7 @@ fi
 
 # generate initial config if necessary
 if [ ! -f $CONFIG_FILE ]; then
-    syncthing -generate=$CONFIG_DIR
+    gosu syncthing /usr/bin/syncthing -generate=$CONFIG_DIR
     config_del "/configuration/folder"
     config_set "options/startBrowser" "false"
 fi
@@ -79,10 +79,16 @@ if [ -f "/pre-launch.sh" ]; then
     source /pre-launch.sh
 fi
 
-syncthing -home=$CONFIG_DIR -paths
+usermod -u $UID syncthing
+# set permissions so that we have access to volumes
+chown -R syncthing:users $CONFIG_DIR /syncthing/data /usr/bin/syncthing
+chmod -R 770 $CONFIG_DIR /syncthing/data
+
+gosu syncthing syncthing -home=$CONFIG_DIR -paths
 echo "======== config.xml ========"
 cat $CONFIG_FILE
 echo "============================"
-exec syncthing -home=$CONFIG_DIR
+exec gosu syncthing /usr/bin/syncthing -home=$CONFIG_DIR
 
 exit 1
+
