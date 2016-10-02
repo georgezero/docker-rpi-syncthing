@@ -48,9 +48,13 @@ if [ -z "$GUI_PASSWORD_BCRYPT" ] && [ -n "$GUI_PASSWORD_PLAIN" ]; then
 fi
 : ${GUI_PASSWORD_BCRYPT:=''}
 
+#docker run --rm -p 22000:22000  -p 21027:21027/udp -p 8384:8384 -v ~/src/syncthing/config:/syncthing/config -v ~/src/syncthing/data:/syncthing/data --name syncthing -e PGID=1001 -e PUID=1001 georgezero/rpi-syncthing
 #usermod -u 1000 george
 #usermod -u $UID syncthing
+
 # set permissions so that we have access to volumes
+#usermod -u ${PUID} -g ${PGID} george
+usermod -u 1001 george
 chown -R george:george $CONFIG_DIR /syncthing/data /usr/bin/syncthing
 chmod -R 770 $CONFIG_DIR /syncthing/data
 
@@ -87,10 +91,12 @@ if [ -f "/pre-launch.sh" ]; then
 fi
 
 gosu george syncthing -home=$CONFIG_DIR -paths
+#syncthing -home=$CONFIG_DIR -paths
 echo "======== config.xml ========"
 cat $CONFIG_FILE
 echo "============================"
 exec gosu george syncthing -home=$CONFIG_DIR
+#exec syncthing -home=$CONFIG_DIR
 
 exit 1
 

@@ -26,7 +26,8 @@ VOLUME /syncthing/data
 
 #RUN adduser --disabled-password --gecos '' george && adduser george sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #USER george
-RUN useradd --no-create-home george
+RUN groupadd george
+RUN useradd --no-create-home -g george george
 ADD start.sh /
 CMD sudo /start.sh
 # entry creates non-root user, and runs start.sh
